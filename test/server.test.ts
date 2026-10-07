@@ -79,6 +79,18 @@ describe('POST /api/quotes', () => {
     expect(response.statusCode).toBe(413);
   });
 
+  it('rejette un type de contenu non supporté', async () => {
+    const server = await startApp();
+    const response = await server.inject({
+      method: 'POST',
+      url: '/api/quotes',
+      headers: { 'content-type': 'text/plain' },
+      payload: 'Back to the Future 1',
+    });
+
+    expect(response.statusCode).toBe(415);
+  });
+
   it('limite le nombre de requêtes par client', async () => {
     const server = await startApp({ rateLimitPerMinute: 2 });
     const request = () =>
