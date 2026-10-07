@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Back to the Future — Caisse DVD</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Back to the Future — Caisse DVD</h1>
+        <p>
+          Saisissez un titre de film par ligne. Un volet de la saga coûte 15 € (−10 % dès 2 volets
+          différents, −20 % dès 3), les autres films 20 €.
+        </p>
+      </header>
+
+      <form id="cart-form">
+        <label for="cart">Panier</label>
+        <textarea id="cart" name="cart" rows="8" maxlength="10000" spellcheck="false" required>
+Back to the Future 1
+Back to the Future 2
+Back to the Future 3
+La chèvre</textarea>
+        <div class="examples" aria-label="Exemples de l'énoncé">
+          <span>Exemples :</span>
+          <button type="button" data-example="1">n°1</button>
+          <button type="button" data-example="2">n°2</button>
+          <button type="button" data-example="3">n°3</button>
+          <button type="button" data-example="4">n°4</button>
+          <button type="button" data-example="5">n°5</button>
+        </div>
+        <button type="submit">Calculer le prix</button>
+      </form>
+
+      <section id="result" aria-live="polite" hidden>
+        <p class="total">Total : <output id="total"></output></p>
+        <h2>Films reconnus</h2>
+        <ul id="movies"></ul>
+        <h2>Détail</h2>
+        <dl id="details"></dl>
+      </section>
+
+      <p id="error" role="alert" hidden></p>
+    </main>
+  </body>
+</html>
