@@ -84,8 +84,8 @@ describe('POST /api/quotes', () => {
     const response = await server.inject({
       method: 'POST',
       url: '/api/quotes',
-      headers: { 'content-type': 'text/plain' },
-      payload: 'Back to the Future 1',
+      headers: { 'content-type': 'application/xml' },
+      payload: '<cart>Back to the Future 1</cart>',
     });
 
     expect(response.statusCode).toBe(415);
