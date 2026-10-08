@@ -21,6 +21,10 @@ export async function buildApp(config: ServerConfig): Promise<FastifyInstance> {
     // Validation stricte : Fastify convertit par défaut les types et retire les champs inconnus
     // en silence ; on préfère rejeter explicitement toute requête non conforme au contrat.
     ajv: { customOptions: { coerceTypes: false, removeAdditional: false } },
+    // Délais maximaux : sans eux, un client très lent (attaque « slowloris ») peut monopoliser
+    // des connexions indéfiniment. Fastify ne fixe aucune limite par défaut.
+    requestTimeout: 10_000,
+    connectionTimeout: 15_000,
   });
 
   // En-têtes de sécurité HTTP (CSP stricte, nosniff, frameguard, HSTS…).
