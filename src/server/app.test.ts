@@ -1,8 +1,8 @@
 import type { FastifyInstance } from 'fastify';
 import { afterEach, describe, expect, it } from 'vitest';
-import { buildApp } from '../src/server/app.js';
-import type { ServerConfig } from '../src/server/config.js';
-import { MAX_CART_LENGTH } from '../src/server/quote-route.js';
+import { buildApp } from './app.js';
+import type { ServerConfig } from './config.js';
+import { MAX_CART_LENGTH } from './quote-route.js';
 
 const TEST_CONFIG: ServerConfig = {
   host: '127.0.0.1',

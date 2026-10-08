@@ -159,9 +159,8 @@ src/
 │   ├── cart.ts            Lecture du panier texte
 │   └── pricing.ts         Prix, paliers de remise, calcul du prix et cas d'usage quoteCart
 ├── server/            Adaptateur HTTP (Fastify) : configuration, sécurité, routes
-└── cli/               Adaptateur ligne de commande
+└── cli.ts             Adaptateur ligne de commande
 public/                Interface web statique (HTML, CSS, JavaScript sans build)
-test/                  Tests d'intégration (API HTTP, CLI)
 examples/              Exemples de l'énoncé
 docs/                  Documentation technique et décisions d'architecture
 ```
@@ -172,11 +171,12 @@ Le métier ne dépend d'aucun framework : l'API et la CLI ne sont que deux
 
 ## Qualité et tests
 
-- **Tests unitaires** à côté du code (`*.test.ts`) ; les **cinq exemples de
+- **Tests** à côté du code testé (`foo.ts` → `foo.test.ts`) ; les **cinq exemples de
   l'énoncé sont les tests d'acceptation** du calcul
   ([`pricing.test.ts`](src/domain/pricing.test.ts)) et de la CLI
-  ([`test/cli.test.ts`](test/cli.test.ts)).
-- **Tests d'intégration** de l'API via `fastify.inject()`, sans ouvrir de port.
+  ([`cli.test.ts`](src/cli.test.ts)).
+- **Tests d'intégration** de l'API via `fastify.inject()`, sans ouvrir de port
+  ([`app.test.ts`](src/server/app.test.ts)).
 - Couverture de 100 %, avec un seuil bloquant à 95 %.
 - TypeScript en mode strict, ESLint `strictTypeChecked`, Prettier.
 - **CI GitHub Actions** sur Node 22 et 24 : format, lint, typage, tests,

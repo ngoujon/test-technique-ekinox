@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 /** Exécute la CLI comme le ferait un utilisateur, avec un fichier d'exemple sur l'entrée standard. */
 function runCli(exampleFile: string): string {
-  return execFileSync(process.execPath, ['--import', 'tsx', 'src/cli/main.ts'], {
+  return execFileSync(process.execPath, ['--import', 'tsx', 'src/cli.ts'], {
     input: readFileSync(`examples/${exampleFile}`),
     encoding: 'utf8',
   });
