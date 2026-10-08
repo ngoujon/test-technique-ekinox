@@ -31,9 +31,37 @@ export async function buildApp(config: ServerConfig): Promise<FastifyInstance> {
   // pour réduire la surface d'attaque (tout autre type est rejeté en 415).
   app.removeContentTypeParser('text/plain');
 
-  // En-têtes de sécurité HTTP (CSP stricte, nosniff, frameguard, HSTS…).
-  // La CSP par défaut interdit tout script inline : l'interface n'en utilise aucun.
-  await app.register(helmet);
+  // En-têtes de sécurité HTTP (CSP, nosniff, anti-clickjacking, HSTS…).
+  // La CSP est définie en liste blanche explicite, plus stricte que celle de helmet par
+  // défaut : tout est interdit sauf les scripts, styles, images et appels d'API servis par
+  // l'application elle-même. Aucun script ni style inline n'est autorisé.
+  await app.register(helmet, {
+    contentSecurityPolicy: {
+      useDefaults: false,
+      directives: {
+        defaultSrc: ["'none'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'"],
+        imgSrc: ["'self'"],
+        connectSrc: ["'self'"],
+        formAction: ["'self'"],
+        frameAncestors: ["'none'"],
+        baseUri: ["'none'"],
+        objectSrc: ["'none'"],
+        upgradeInsecureRequests: [],
+      },
+    },
+    frameguard: { action: 'deny' },
+  });
+
+  // Désactive les fonctionnalités sensibles du navigateur, dont l'interface n'a pas l'usage.
+  app.addHook('onRequest', (_request, reply, done) => {
+    reply.header(
+      'Permissions-Policy',
+      'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+    );
+    done();
+  });
 
   // Limite le nombre de requêtes par IP pour protéger le service des abus.
   await app.register(rateLimit, { max: config.rateLimitPerMinute, timeWindow: '1 minute' });
