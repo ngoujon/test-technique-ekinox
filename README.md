@@ -187,6 +187,5 @@ Le métier ne dépend d'aucun framework : l'API et la CLI ne sont que deux
 - [Tests](docs/tests.md) : stratégie, outils, lancement et écriture des tests
 - [Architecture](docs/architecture.md) : découpage et choix techniques
 - [API HTTP](docs/api.md) : contrat de `POST /api/quotes`
-- [Sécurité](SECURITY.md) : mesures en place et signalement des vulnérabilités
 - [Décisions d'architecture (ADR)](docs/adr) : historique des choix structurants
 - [Contribuer](CONTRIBUTING.md) : conventions de l'équipe
