@@ -13,7 +13,7 @@ couverte par un test : la changer revient à modifier un test, puis le code.
 4. Tout autre film coûte **20 €**.
 
 Ces valeurs sont centralisées dans
-[`pricing-policy.ts`](../src/domain/pricing-policy.ts).
+[`pricing.ts`](../src/domain/pricing.ts) (`BTTF_PROMOTION_POLICY`).
 
 ## Vérification des exemples
 

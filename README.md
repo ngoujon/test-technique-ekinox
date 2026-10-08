@@ -157,8 +157,7 @@ src/
 │   ├── money.ts           Montants en centimes et opérations associées
 │   ├── movie.ts           Reconnaissance des volets de la saga
 │   ├── cart.ts            Lecture du panier texte
-│   ├── pricing-policy.ts  Prix et paliers de remise (configuration)
-│   └── pricing.ts         Calcul du prix d'un panier
+│   └── pricing.ts         Prix, paliers de remise et calcul du prix d'un panier
 ├── application/
 │   └── quote-cart.ts  Cas d'usage « chiffrer un panier », partagé par l'API et la CLI
 ├── server/            Adaptateur HTTP (Fastify) : configuration, sécurité, routes

@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { parseCart } from './cart.js';
 import { euros, toEuros } from './money.js';
-import type { PricingPolicy } from './pricing-policy.js';
-import { priceCart } from './pricing.js';
+import { priceCart, type PricingPolicy } from './pricing.js';
 
 const priceOf = (cart: string, policy?: PricingPolicy): number =>
   toEuros(priceCart(parseCart(cart), policy).total);
