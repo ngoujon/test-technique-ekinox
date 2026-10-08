@@ -173,7 +173,8 @@ Le métier ne dépend d'aucun framework : l'API et la CLI ne sont que deux
 - **Tests par propriété** ([fast-check](https://fast-check.dev)) : 2 000 paniers
   aléatoires sont comparés à une transcription directe de la règle de l'énoncé.
 - **Tests d'intégration** de l'API via `fastify.inject()`, sans ouvrir de port
-  ([`app.test.ts`](src/server/app.test.ts)).
+  ([`app.test.ts`](src/server/app.test.ts)), et de l'interface web dans un DOM
+  simulé ([`public.test.ts`](src/public.test.ts)).
 - Couverture de 100 %, avec un seuil bloquant à 95 %.
 - TypeScript en mode strict, ESLint `strictTypeChecked`, Prettier.
 - **CI GitHub Actions** sur Node 22 et 24 : format, lint, typage, tests,
@@ -183,6 +184,7 @@ Le métier ne dépend d'aucun framework : l'API et la CLI ne sont que deux
 ## Documentation complémentaire
 
 - [Règles métier et hypothèses](docs/regles-metier.md) : interprétation de l'énoncé, cas limites
+- [Tests](docs/tests.md) : stratégie, outils, lancement et écriture des tests
 - [Architecture](docs/architecture.md) : découpage et choix techniques
 - [API HTTP](docs/api.md) : contrat de `POST /api/quotes`
 - [Sécurité](SECURITY.md) : mesures en place et signalement des vulnérabilités

@@ -28,11 +28,8 @@ npm run verify   # format, lint, typage, tests + couverture : identique à la CI
 
 ### Tests
 
-- Toute règle métier ou correction de bug s'accompagne d'un test.
-- Les tests, unitaires comme d'intégration, sont à côté du fichier testé
-  (`foo.ts` → `foo.test.ts`).
-- Les noms de tests décrivent le comportement attendu, en français.
-- La couverture ne doit pas descendre sous 95 % (bloquant en CI).
+Toute règle métier ou correction de bug s'accompagne d'un test. Stratégie,
+outils et conventions : voir [docs/tests.md](docs/tests.md).
 
 ### Commits et branches
 
