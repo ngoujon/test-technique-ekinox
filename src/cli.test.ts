@@ -1,23 +1,31 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { toEuros } from './domain/money.js';
+import { quoteCart } from './domain/pricing.js';
 
-/** Exécute la CLI comme le ferait un utilisateur, avec un fichier d'exemple sur l'entrée standard. */
-function runCli(exampleFile: string): string {
+/** Exécute la CLI comme le ferait un utilisateur, avec le panier sur l'entrée standard. */
+function runCli(cart: string): string {
   return execFileSync(process.execPath, ['--import', 'tsx', 'src/cli.ts'], {
-    input: readFileSync(`examples/${exampleFile}`),
+    input: cart,
     encoding: 'utf8',
   });
 }
 
+/**
+ * La CLI n'est qu'un adaptateur : on vérifie qu'elle lit le fichier tel quel et affiche
+ * le prix calculé par le domaine (dont les règles sont testées dans `pricing.test.ts`),
+ * pour chaque fichier présent dans `examples/`.
+ */
 describe('CLI', () => {
-  it.each([
-    ['exemple-1.txt', '36'],
-    ['exemple-2.txt', '27'],
-    ['exemple-3.txt', '15'],
-    ['exemple-4.txt', '48'],
-    ['exemple-5.txt', '56'],
-  ])('affiche le prix de %s', (exampleFile, expected) => {
-    expect(runCli(exampleFile)).toBe(`${expected}\n`);
+  it.each(readdirSync('examples'))('affiche le prix du panier %s', (exampleFile) => {
+    const cart = readFileSync(`examples/${exampleFile}`, 'utf8');
+
+    expect(runCli(cart)).toBe(`${String(toEuros(quoteCart(cart).quote.total))}\n`);
+  });
+
+  it('affiche les prix non entiers avec un point décimal', () => {
+    const cart = 'Back to the Future 1\nBack to the Future 1\nBack to the Future 3';
+    expect(runCli(cart)).toBe(`${String(15 * 3 * 0.9)}\n`); // 40.5
   });
 });

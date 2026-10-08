@@ -1,3 +1,4 @@
+import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { parseCart } from './cart.js';
 import { euros, toEuros } from './money.js';
@@ -6,34 +7,63 @@ import { priceCart, quoteCart, type PricingPolicy } from './pricing.js';
 const priceOf = (cart: string, policy?: PricingPolicy): number =>
   toEuros(priceCart(parseCart(cart), policy).total);
 
-/** Exemples fournis tels quels dans l'énoncé : ce sont les critères d'acceptation. */
+const BTTF_1 = 'Back to the Future 1';
+const BTTF_2 = 'Back to the Future 2';
+const BTTF_3 = 'Back to the Future 3';
+
+/**
+ * Prix de référence, transcrit au plus près de la règle de l'énoncé, volontairement
+ * naïf (euros flottants, aucune réutilisation du code testé) : il sert d'oracle
+ * indépendant pour vérifier l'implémentation sur des paniers quelconques.
+ */
+function referencePrice(titles: readonly string[]): number {
+  const sagaDvds = titles.filter((title) => [BTTF_1, BTTF_2, BTTF_3].includes(title));
+  const differentEpisodes = new Set(sagaDvds).size;
+  const discount = differentEpisodes >= 3 ? 0.2 : differentEpisodes === 2 ? 0.1 : 0;
+  return sagaDvds.length * 15 * (1 - discount) + (titles.length - sagaDvds.length) * 20;
+}
+
+/**
+ * Exemples de l'énoncé : ce sont les critères d'acceptation. Le résultat attendu
+ * est écrit sous la forme du calcul détaillé par l'énoncé, pas comme une valeur figée.
+ */
 describe('exemples de l’énoncé', () => {
   it.each([
-    {
-      example: 1,
-      cart: ['Back to the Future 1', 'Back to the Future 2', 'Back to the Future 3'],
-      expected: 36,
-    },
-    { example: 2, cart: ['Back to the Future 1', 'Back to the Future 3'], expected: 27 },
-    { example: 3, cart: ['Back to the Future 1'], expected: 15 },
-    {
-      example: 4,
-      cart: [
-        'Back to the Future 1',
-        'Back to the Future 2',
-        'Back to the Future 3',
-        'Back to the Future 2',
-      ],
-      expected: 48,
-    },
-    {
-      example: 5,
-      cart: ['Back to the Future 1', 'Back to the Future 2', 'Back to the Future 3', 'La chèvre'],
-      expected: 56,
-    },
+    { example: 1, cart: [BTTF_1, BTTF_2, BTTF_3], expected: 15 * 3 * 0.8 },
+    { example: 2, cart: [BTTF_1, BTTF_3], expected: 15 * 2 * 0.9 },
+    { example: 3, cart: [BTTF_1], expected: 15 },
+    { example: 4, cart: [BTTF_1, BTTF_2, BTTF_3, BTTF_2], expected: 15 * 4 * 0.8 },
+    { example: 5, cart: [BTTF_1, BTTF_2, BTTF_3, 'La chèvre'], expected: 15 * 3 * 0.8 + 20 },
   ])('exemple n°$example → $expected €', ({ cart, expected }) => {
     // Les exemples de l'énoncé séparent les titres par une ligne vide.
-    expect(priceOf(cart.join('\n\n'))).toBe(expected);
+    expect(priceOf(cart.join('\n\n'))).toBeCloseTo(expected, 2);
+  });
+});
+
+/**
+ * Test par propriété : des milliers de paniers aléatoires (volets, doublons, autres
+ * films, dans n'importe quel ordre) doivent tous respecter la règle de l'énoncé.
+ * Aucun résultat n'est prédéfini : c'est la règle elle-même qui est vérifiée.
+ */
+describe('règle de l’énoncé sur des paniers aléatoires', () => {
+  const anyTitle = fc.constantFrom(BTTF_1, BTTF_2, BTTF_3, 'La chèvre', 'Les Visiteurs', 'Matrix');
+
+  it('calcule le même prix que la règle de référence', () => {
+    fc.assert(
+      fc.property(fc.array(anyTitle, { maxLength: 30 }), (titles) => {
+        expect(priceOf(titles.join('\n'))).toBeCloseTo(referencePrice(titles), 2);
+      }),
+      { numRuns: 2_000 },
+    );
+  });
+
+  it('donne un prix indépendant de l’ordre de saisie', () => {
+    fc.assert(
+      fc.property(fc.array(anyTitle, { maxLength: 30 }), (titles) => {
+        const reversed = [...titles].reverse();
+        expect(priceOf(reversed.join('\n'))).toBe(priceOf(titles.join('\n')));
+      }),
+    );
   });
 });
 
