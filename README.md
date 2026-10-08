@@ -51,30 +51,17 @@ docker run --rm -p 3000:3000 bttf-dvd-shop
 
 ### Interface web
 
-**1. Saisir le panier** dans la zone de texte, un titre par ligne, puis cliquer
-sur **Calculer le prix**. Les boutons « n°1 » à « n°5 » chargent directement les
-exemples de l'énoncé.
+![Interface : panier de l'exemple n°5 à gauche, ticket de caisse à droite avec un total de 56 €](docs/images/apercu.png)
 
-<p align="center">
-  <img src="docs/images/accueil.png" alt="Écran d'accueil : zone de saisie du panier, boutons d'exemples et bouton Calculer le prix" width="500" />
-</p>
+1. **Saisir le panier** à gauche, un titre par ligne, puis cliquer sur
+   **Calculer le prix**. Les boutons 1 à 5 chargent les exemples de l'énoncé.
+2. **Lire le ticket de caisse** à droite : le total, les films reconnus (volet
+   de la saga ou autre film) et le détail de la remise. On vérifie ainsi d'un
+   coup d'œil que le panier a été correctement lu.
 
-**2. Lire le résultat.** L'écran affiche le total, la liste des films reconnus
-(volet de la saga ou autre film) et le détail de la remise : on vérifie ainsi
-d'un coup d'œil que le panier a été correctement lu.
-
-|                              Exemple n°5 : 3 volets différents + un autre film                               |                            Exemple n°4 : la remise s'applique aussi aux doublons                            |
-| :----------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
-| ![Exemple n°5 : total de 56 €, remise de 20 % sur les 3 volets, La chèvre à 20 €](docs/images/exemple-5.png) | ![Exemple n°4 : total de 48 €, remise de 20 % sur les 4 DVD de la saga](docs/images/exemple-4-doublons.png) |
-
-**3. Saisie libre.** La saisie tolère les écarts de casse, les espaces superflus
-et les lignes vides. Ici, deux exemplaires du volet 1 et un volet 3 font
-2 volets différents (−10 % sur les 3 DVD), et un titre inconnu est facturé
-comme un autre film :
-
-<p align="center">
-  <img src="docs/images/saisie-libre.png" alt="Saisie libre : total de 60,50 €, remise de 10 % sur 3 DVD de la saga et un autre film à 20 €" width="500" />
-</p>
+|                            La remise s'applique aussi aux doublons (exemple n°4)                            |                                      Saisie libre : casse, espaces, lignes vides, titre inconnu                                       |
+| :---------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------: |
+| ![Exemple n°4 : total de 48 €, remise de 20 % sur les 4 DVD de la saga](docs/images/exemple-4-doublons.png) | ![Saisie libre : 2 volets différents sur 3 DVD, remise de 10 %, un autre film à 20 €, total de 60,50 €](docs/images/saisie-libre.png) |
 
 ### API HTTP
 
@@ -171,10 +158,13 @@ Le métier ne dépend d'aucun framework : l'API et la CLI ne sont que deux
 
 ## Qualité et tests
 
-- **Tests** à côté du code testé (`foo.ts` → `foo.test.ts`) ; les **cinq exemples de
-  l'énoncé sont les tests d'acceptation** du calcul
-  ([`pricing.test.ts`](src/domain/pricing.test.ts)) et de la CLI
-  ([`cli.test.ts`](src/cli.test.ts)).
+- **Tests** à côté du code testé (`foo.ts` → `foo.test.ts`). Les **cinq exemples
+  de l'énoncé sont les tests d'acceptation** du calcul
+  ([`pricing.test.ts`](src/domain/pricing.test.ts)), avec le résultat attendu
+  écrit sous forme de calcul (ex. `15 * 3 * 0.8 + 20`) plutôt que figé. La CLI est
+  testée sur chaque fichier d'[`examples/`](examples) ([`cli.test.ts`](src/cli.test.ts)).
+- **Tests par propriété** ([fast-check](https://fast-check.dev)) : 2 000 paniers
+  aléatoires sont comparés à une transcription directe de la règle de l'énoncé.
 - **Tests d'intégration** de l'API via `fastify.inject()`, sans ouvrir de port
   ([`app.test.ts`](src/server/app.test.ts)).
 - Couverture de 100 %, avec un seuil bloquant à 95 %.
