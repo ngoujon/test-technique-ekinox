@@ -1,3 +1,4 @@
+import { parseCart } from './cart.js';
 import type { Movie } from './movie.js';
 import { addCents, euros, multiplyCents, percentOf, subtractCents, type Cents } from './money.js';
 
@@ -87,4 +88,19 @@ export function priceCart(movies: readonly Movie[], policy = BTTF_PROMOTION_POLI
     otherMovies: { quantity: otherMoviesQuantity, total: otherMoviesTotal },
     total: addCents(sagaTotal, otherMoviesTotal),
   };
+}
+
+export interface CartQuote {
+  /** Films reconnus, dans l'ordre de saisie : permet de vérifier la lecture du panier. */
+  readonly movies: readonly Movie[];
+  readonly quote: Quote;
+}
+
+/**
+ * Cas d'usage de l'application : chiffrer un panier saisi en texte.
+ * Point d'entrée commun à l'API HTTP et à la CLI, qui restent ainsi de simples adaptateurs.
+ */
+export function quoteCart(cartText: string): CartQuote {
+  const movies = parseCart(cartText);
+  return { movies, quote: priceCart(movies) };
 }

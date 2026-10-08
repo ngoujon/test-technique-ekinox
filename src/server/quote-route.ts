@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import { quoteCart } from '../application/quote-cart.js';
+import { quoteCart } from '../domain/pricing.js';
 
 /**
  * Taille maximale d'un panier, en caractères. Borne le travail du serveur

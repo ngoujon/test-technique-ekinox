@@ -6,23 +6,26 @@
             ┌──────────────┐        ┌──────────────┐
  Navigateur │  public/     │  HTTP  │ src/server/  │
  ──────────▶│ (HTML/CSS/JS)│───────▶│  (Fastify)   │──┐
-            └──────────────┘        └──────────────┘  │
-                                                      ▼
-            ┌──────────────┐                 ┌──────────────────┐     ┌──────────────┐
- Terminal   │  src/cli/    │────────────────▶│ src/application/ │────▶│ src/domain/  │
- ──────────▶│              │                 │   quoteCart()    │     │ règles métier│
-            └──────────────┘                 └──────────────────┘     └──────────────┘
+            └──────────────┘        └──────────────┘  │   ┌────────────────────┐
+                                                      ├──▶│ src/domain/        │
+            ┌──────────────┐                          │   │ quoteCart()        │
+ Terminal   │  src/cli.ts  │──────────────────────────┘   │ règles métier      │
+ ──────────▶│              │                              └────────────────────┘
+            └──────────────┘
 ```
 
-Le projet suit une architecture en couches, avec des dépendances dirigées vers
-le métier :
+Le projet sépare le métier des adaptateurs techniques, avec des dépendances
+dirigées vers le métier :
 
-| Couche            | Rôle                                                         | Dépend de               |
-| ----------------- | ------------------------------------------------------------ | ----------------------- |
-| `domain/`         | Règles métier pures : lecture du panier, calcul du prix      | rien                    |
-| `application/`    | Cas d'usage `quoteCart` : orchestre le domaine               | `domain`                |
-| `server/`, `cli/` | Adaptateurs : traduisent HTTP / terminal vers le cas d'usage | `application`, `domain` |
-| `public/`         | Interface web statique, consomme l'API                       | API HTTP                |
+| Couche              | Rôle                                                                             | Dépend de |
+| ------------------- | -------------------------------------------------------------------------------- | --------- |
+| `domain/`           | Règles métier pures : lecture du panier, calcul du prix, cas d'usage `quoteCart` | rien      |
+| `server/`, `cli.ts` | Adaptateurs : traduisent HTTP / terminal vers `quoteCart`                        | `domain`  |
+| `public/`           | Interface web statique, consomme l'API                                           | API HTTP  |
+
+Une couche « application » distincte n'apporterait rien à ce stade : le seul
+cas d'usage tient en deux lignes. Elle se justifiera si des cas d'usage
+orchestrant plusieurs services (persistance, paiement…) apparaissent.
 
 Conséquences :
 

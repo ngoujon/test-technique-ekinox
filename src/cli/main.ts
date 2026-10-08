@@ -5,7 +5,7 @@
  *   npm run cli < examples/exemple-5.txt   # → 56
  */
 import { text } from 'node:stream/consumers';
-import { quoteCart } from '../application/quote-cart.js';
+import { quoteCart } from '../domain/pricing.js';
 import { toEuros } from '../domain/money.js';
 
 const { quote } = quoteCart(await text(process.stdin));

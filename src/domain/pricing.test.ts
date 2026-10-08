@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { parseCart } from './cart.js';
 import { euros, toEuros } from './money.js';
-import { priceCart, type PricingPolicy } from './pricing.js';
+import { priceCart, quoteCart, type PricingPolicy } from './pricing.js';
 
 const priceOf = (cart: string, policy?: PricingPolicy): number =>
   toEuros(priceCart(parseCart(cart), policy).total);
@@ -95,5 +95,14 @@ describe('priceCart', () => {
     expect(
       priceOf('Back to the Future 1\nBack to the Future 2\nBack to the Future 3', policy),
     ).toBe(15);
+  });
+});
+
+describe('quoteCart', () => {
+  it('retourne les films reconnus et le prix du panier', () => {
+    const { movies, quote } = quoteCart('Back to the Future 1\nLa chèvre');
+
+    expect(movies.map((movie) => movie.kind)).toEqual(['saga', 'other']);
+    expect(quote.total).toBe(euros(35));
   });
 });
