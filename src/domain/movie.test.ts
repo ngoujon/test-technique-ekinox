@@ -28,6 +28,13 @@ describe('normalizeTitle', () => {
     expect(normalizeTitle(decomposed)).toBe('La chèvre');
   });
 
+  it('supprime les caractères de contrôle et de formatage invisibles', () => {
+    // Espace de largeur nulle, BOM, forçage droite-à-gauche (RLO) et caractère nul.
+    expect(normalizeTitle('\ufeffBack to the\u200b Future\u202e 1\u0000')).toBe(
+      'Back to the Future 1',
+    );
+  });
+
   it('remplace les espaces insécables et multiples par un espace simple', () => {
     expect(normalizeTitle('La  chèvre ')).toBe('La chèvre');
   });

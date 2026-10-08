@@ -20,10 +20,18 @@ const SAGA_TITLE_PATTERN = /^back to the future (\d+)$/;
 /**
  * Normalise un titre saisi par un humain :
  * - forme Unicode NFC (« è » composé ou décomposé doit être le même titre) ;
- * - espaces multiples / insécables réduits à un espace, bords supprimés.
+ * - espaces multiples / insécables / tabulations réduits à un espace, bords supprimés ;
+ * - caractères de contrôle et de formatage invisibles supprimés (espace de largeur
+ *   nulle, BOM, marques de direction bidirectionnelles…). Sans cela, une ligne
+ *   d'apparence vide serait facturée comme un film, et un titre pourrait s'afficher
+ *   différemment de ce qui a réellement été saisi (usurpation visuelle).
  */
 export function normalizeTitle(rawTitle: string): string {
-  return rawTitle.normalize('NFC').replace(/\s+/gu, ' ').trim();
+  return rawTitle
+    .normalize('NFC')
+    .replace(/\s+/gu, ' ')
+    .replace(/[\p{Cc}\p{Cf}]/gu, '')
+    .trim();
 }
 
 function isSagaEpisode(value: number): value is SagaEpisode {

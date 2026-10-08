@@ -15,6 +15,12 @@ describe('parseCart', () => {
     ).toHaveLength(2);
   });
 
+  it('ignore les lignes ne contenant que des caractères invisibles', () => {
+    expect(parseCart('La chèvre\n\u200b\n\ufeff\t\n\u0000')).toEqual([
+      { kind: 'other', title: 'La chèvre' },
+    ]);
+  });
+
   it('retourne un panier vide pour un texte vide', () => {
     expect(parseCart('')).toEqual([]);
     expect(parseCart('\n \n')).toEqual([]);
