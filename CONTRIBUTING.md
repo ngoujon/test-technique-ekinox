@@ -44,4 +44,6 @@ npm run verify   # format, lint, typage, tests + couverture : identique à la CI
 ### Décisions
 
 Tout choix structurant (dépendance majeure, changement d'architecture, de
-contrat d'API) est documenté par une ADR dans [`docs/adr`](docs/adr).
+contrat d'API) est documenté par une ADR dans [`docs/adr`](docs/adr) : contexte,
+décision, conséquences. Une ADR n'est jamais réécrite : si la décision change,
+une nouvelle ADR la remplace et l'ancienne passe au statut « Remplacée ».
