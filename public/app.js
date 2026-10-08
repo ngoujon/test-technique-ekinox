@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Interface web minimaliste : envoie le panier à l'API et affiche le résultat.
+ * Interface web : envoie le panier à l'API et affiche le ticket de caisse.
  * Tout le calcul est fait côté serveur ; ce script ne fait que de l'affichage.
  * Le contenu dynamique est inséré via `textContent` (jamais `innerHTML`) pour
  * empêcher toute injection de HTML (XSS) à partir des titres saisis.
@@ -39,56 +39,64 @@ function byId(id) {
 const form = byId('cart-form');
 /** @type {HTMLTextAreaElement} */
 const cartInput = byId('cart');
-const resultSection = byId('result');
-const errorMessage = byId('error');
+/** @type {HTMLButtonElement} */
+const submitButton = byId('submit');
 
 /**
+ * Crée un élément avec un texte et, éventuellement, une classe CSS.
  * @param {string} tag
  * @param {string} text
+ * @param {string} [className]
  */
-function element(tag, text) {
+function element(tag, text, className) {
   const node = document.createElement(tag);
   node.textContent = text;
+  if (className) node.className = className;
   return node;
+}
+
+/** Affiche un seul des trois états du ticket : résultat, invitation ou erreur. */
+function show(/** @type {'result' | 'placeholder' | 'error'} */ state) {
+  for (const id of ['result', 'placeholder', 'error']) byId(id).hidden = id !== state;
+}
+
+/** @param {any} movie Film reconnu par l'API. */
+function renderMovie(movie) {
+  const item = element('li', movie.title);
+  const isSaga = movie.kind === 'saga';
+  item.append(
+    element('span', isSaga ? `Volet ${movie.episode}` : 'Autre film', `badge ${movie.kind}`),
+  );
+  return item;
 }
 
 /** @param {any} result Réponse de `POST /api/quotes`. */
 function renderResult(result) {
-  byId('total').textContent = formatCents(result.totalCents);
-
-  byId('movies').replaceChildren(
-    ...result.movies.map((/** @type {any} */ movie) => {
-      const label = movie.kind === 'saga' ? `saga, volet ${movie.episode}` : 'autre film';
-      return element('li', `${movie.title} (${label})`);
-    }),
-  );
-
   const { saga, otherMovies } = result;
+  byId('total').textContent = formatCents(result.totalCents);
+  byId('movies').replaceChildren(...result.movies.map(renderMovie));
   byId('details').replaceChildren(
-    element(
-      'dt',
-      `DVD de la saga (${saga.quantity}, dont ${saga.distinctEpisodes} volet(s) différent(s))`,
-    ),
+    element('dt', `Saga : ${saga.quantity} DVD, ${saga.distinctEpisodes} volet(s) différent(s)`),
     element('dd', formatCents(saga.subtotalCents)),
-    element('dt', `Remise saga (${saga.discountPercent} %)`),
-    element('dd', `− ${formatCents(saga.discountCents)}`),
-    element('dt', `Autres films (${otherMovies.quantity})`),
+    element('dt', `Remise saga (${saga.discountPercent} %)`, 'discount'),
+    element('dd', `−${formatCents(saga.discountCents)}`, 'discount'),
+    element('dt', `Autres films : ${otherMovies.quantity} DVD`),
     element('dd', formatCents(otherMovies.totalCents)),
+    element('dt', 'Total', 'total'),
+    element('dd', formatCents(result.totalCents), 'total'),
   );
-
-  errorMessage.hidden = true;
-  resultSection.hidden = false;
+  show('result');
 }
 
 /** @param {string} message */
 function renderError(message) {
-  errorMessage.textContent = message;
-  errorMessage.hidden = false;
-  resultSection.hidden = true;
+  byId('error').textContent = message;
+  show('error');
 }
 
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
+  submitButton.disabled = true;
   try {
     const response = await fetch('/api/quotes', {
       method: 'POST',
@@ -96,13 +104,15 @@ form.addEventListener('submit', async (event) => {
       body: JSON.stringify({ cart: cartInput.value }),
     });
     const body = await response.json();
-    if (!response.ok) {
+    if (response.ok) {
+      renderResult(body);
+    } else {
       renderError(`Le panier n'a pas pu être chiffré : ${body.error ?? response.statusText}`);
-      return;
     }
-    renderResult(body);
   } catch {
     renderError('Le serveur est injoignable. Veuillez réessayer.');
+  } finally {
+    submitButton.disabled = false;
   }
 });
 
@@ -113,3 +123,6 @@ for (const button of document.querySelectorAll('[data-example]')) {
     form.requestSubmit();
   });
 }
+
+// Chiffre dès l'ouverture le panier pré-rempli : l'utilisateur voit immédiatement un ticket.
+form.requestSubmit();

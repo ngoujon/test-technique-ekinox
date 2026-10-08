@@ -3,47 +3,70 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Calcul du prix d'un panier de DVD avec la promotion Back to the Future."
+    />
     <title>Caisse DVD Back to the Future</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles.css" />
     <script type="module" src="/app.js"></script>
   </head>
   <body>
-    <main>
-      <header>
-        <h1>Caisse DVD Back to the Future</h1>
-        <p>
-          Saisissez un titre de film par ligne. Un volet de la saga coûte 15 € (−10 % dès 2 volets
-          différents, −20 % dès 3), les autres films 20 €.
-        </p>
+    <main class="page">
+      <header class="hero">
+        <p class="kicker">Vidéoclub · Promotion de l'an 2000</p>
+        <h1><span class="brand">Back to the Future</span> Caisse DVD</h1>
+        <ul class="rules" aria-label="Règles de prix">
+          <li><strong>15 €</strong> le volet de la saga</li>
+          <li><strong>−10 %</strong> dès 2 volets différents</li>
+          <li><strong>−20 %</strong> dès 3 volets différents</li>
+          <li><strong>20 €</strong> tout autre film</li>
+        </ul>
       </header>
 
-      <form id="cart-form">
-        <label for="cart">Panier</label>
-        <textarea id="cart" name="cart" rows="8" maxlength="10000" spellcheck="false" required>
+      <div class="layout">
+        <form id="cart-form" class="card">
+          <h2>Panier</h2>
+          <label for="cart" class="hint">Un titre de film par ligne</label>
+          <textarea id="cart" name="cart" rows="9" maxlength="10000" spellcheck="false" required>
 Back to the Future 1
 Back to the Future 2
 Back to the Future 3
 La chèvre</textarea>
-        <div class="examples" aria-label="Exemples de l'énoncé">
-          <span>Exemples :</span>
-          <button type="button" data-example="1">n°1</button>
-          <button type="button" data-example="2">n°2</button>
-          <button type="button" data-example="3">n°3</button>
-          <button type="button" data-example="4">n°4</button>
-          <button type="button" data-example="5">n°5</button>
-        </div>
-        <button type="submit">Calculer le prix</button>
-      </form>
+          <div class="examples" role="group" aria-label="Exemples de l'énoncé">
+            <span>Exemples de l'énoncé</span>
+            <button type="button" data-example="1">1</button>
+            <button type="button" data-example="2">2</button>
+            <button type="button" data-example="3">3</button>
+            <button type="button" data-example="4">4</button>
+            <button type="button" data-example="5">5</button>
+          </div>
+          <button type="submit" id="submit" class="primary">Calculer le prix</button>
+        </form>
 
-      <section id="result" aria-live="polite" hidden>
-        <p class="total">Total : <output id="total"></output></p>
-        <h2>Films reconnus</h2>
-        <ul id="movies"></ul>
-        <h2>Détail</h2>
-        <dl id="details"></dl>
-      </section>
+        <section class="card" aria-labelledby="result-title">
+          <h2 id="result-title">Ticket de caisse</h2>
 
-      <p id="error" role="alert" hidden></p>
+          <div id="result" aria-live="polite" hidden>
+            <div class="display">
+              <span class="display-label">Total</span>
+              <output id="total" class="display-value"></output>
+            </div>
+
+            <h3>Films reconnus</h3>
+            <ul id="movies" class="movies"></ul>
+
+            <h3>Détail</h3>
+            <dl id="details" class="details"></dl>
+          </div>
+
+          <p id="placeholder" class="placeholder">
+            Saisissez un panier puis lancez le calcul pour voir le ticket.
+          </p>
+          <p id="error" class="error" role="alert" hidden></p>
+        </section>
+      </div>
     </main>
   </body>
 </html>

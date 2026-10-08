@@ -1,29 +1,178 @@
+/*
+ * Thème inspiré de la DeLorean : tableau de bord sombre, accents orange « flux
+ * capacitor » et afficheur ambré façon « time circuits ». Toutes les couleurs sont
+ * des variables, redéfinies pour le thème clair.
+ * Polices système uniquement : la CSP n'autorise aucune ressource externe.
+ */
 :root {
   color-scheme: light dark;
-  --accent: #e8590c;
-  font-family: system-ui, sans-serif;
+  --bg: #0d0f14;
+  --bg-glow: rgb(255 106 0 / 18%);
+  --surface: #161a22;
+  --surface-alt: #1e232d;
+  --border: #2a303c;
+  --text: #e8eaf0;
+  --muted: #9aa3b2;
+  --accent: #ff6a00;
+  --accent-2: #ffb800;
+  --accent-text: #1a0f00;
+  --display-bg: #0a0705;
+  --display-text: #ffb000;
+  --saga: #ff6a00;
+  --other: #4fb3ff;
+  --error: #ff6b6b;
+  --radius: 14px;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   line-height: 1.5;
 }
 
-main {
-  max-width: 40rem;
-  margin: 2rem auto;
-  padding: 0 1rem;
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f5f2ee;
+    --bg-glow: rgb(255 106 0 / 14%);
+    --surface: #ffffff;
+    --surface-alt: #f7f4f0;
+    --border: #e4ddd4;
+    --text: #1d1b19;
+    --muted: #6b645c;
+    --accent: #e55a00;
+    --other: #0a74c9;
+    --error: #c92a2a;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(60rem 30rem at 50% -10rem, var(--bg-glow), transparent), var(--bg);
+  color: var(--text);
+}
+
+.page {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 3rem 1rem 4rem;
+}
+
+/* --- En-tête --------------------------------------------------------------- */
+
+.hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 
 h1 {
+  margin: 0.5rem 0 1.5rem;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.1;
+}
+
+.brand {
+  display: block;
+  font-style: italic;
+  font-weight: 900;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  background-clip: text;
+  color: transparent;
+}
+
+.rules {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rules li {
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.rules strong {
   color: var(--accent);
 }
 
-form {
+/* --- Cartes ---------------------------------------------------------------- */
+
+.layout {
   display: grid;
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1.5rem;
+  align-items: start;
 }
 
+.card {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 15%);
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+h3 {
+  margin: 1.25rem 0 0.5rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hint {
+  margin-top: -0.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* --- Formulaire ------------------------------------------------------------ */
+
 textarea {
-  font: inherit;
-  font-family: ui-monospace, monospace;
-  padding: 0.5rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-alt);
+  color: var(--text);
+  font:
+    0.95rem/1.6 ui-monospace,
+    'SF Mono',
+    Menlo,
+    Consolas,
+    monospace;
+  resize: vertical;
 }
 
 button {
@@ -31,37 +180,159 @@ button {
   cursor: pointer;
 }
 
-button[type='submit'] {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.25rem;
-  background: var(--accent);
-  color: white;
+:is(textarea, button):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .examples {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
   align-items: center;
+  gap: 0.4rem;
+  color: var(--muted);
+  font-size: 0.875rem;
 }
 
-.total {
-  font-size: 1.75rem;
-  font-weight: bold;
+.examples span {
+  margin-right: 0.25rem;
 }
 
-dl {
+.examples button {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-alt);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.examples button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.primary {
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: var(--accent-text);
+  font-weight: 700;
+  transition: filter 0.15s;
+}
+
+.primary:hover {
+  filter: brightness(1.08);
+}
+
+.primary:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+/* --- Ticket de caisse ------------------------------------------------------ */
+
+.display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border: 2px solid #3a2a12;
+  border-radius: 10px;
+  background: var(--display-bg);
+  box-shadow: inset 0 0 20px rgb(0 0 0 / 80%);
+}
+
+.display-label {
+  color: #c98a2b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.display-value {
+  color: var(--display-text);
+  font:
+    700 2.25rem ui-monospace,
+    'SF Mono',
+    Menlo,
+    Consolas,
+    monospace;
+  text-shadow: 0 0 12px rgb(255 176 0 / 60%);
+}
+
+.movies {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.movies li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: var(--surface-alt);
+  overflow-wrap: anywhere;
+}
+
+.badge {
+  flex-shrink: 0;
+  align-self: center;
+  padding: 0.1rem 0.6rem;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge.saga {
+  color: var(--saga);
+}
+
+.badge.other {
+  color: var(--other);
+}
+
+.details {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 0.25rem 1rem;
+  gap: 0.4rem 1rem;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
 }
 
-dd {
+.details dd {
   margin: 0;
   text-align: right;
 }
 
-#error {
-  color: #c92a2a;
+.details .discount {
+  color: var(--accent);
+}
+
+.details .total {
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+  font-weight: 700;
+}
+
+.placeholder {
+  margin: 0;
+  padding: 2rem 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.error {
+  margin: 0;
+  color: var(--error);
 }
