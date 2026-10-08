@@ -59,7 +59,7 @@ function renderResult(result) {
   byId('movies').replaceChildren(
     ...result.movies.map((/** @type {any} */ movie) => {
       const label = movie.kind === 'saga' ? `saga, volet ${movie.episode}` : 'autre film';
-      return element('li', `${movie.title} — ${label}`);
+      return element('li', `${movie.title} (${label})`);
     }),
   );
 
