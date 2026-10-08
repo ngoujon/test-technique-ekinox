@@ -63,6 +63,13 @@ docker run --rm -p 3000:3000 bttf-dvd-shop
 | :---------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------: |
 | ![Exemple n°4 : total de 48 €, remise de 20 % sur les 4 DVD de la saga](docs/images/exemple-4-doublons.png) | ![Saisie libre : 2 volets différents sur 3 DVD, remise de 10 %, un autre film à 20 €, total de 60,50 €](docs/images/saisie-libre.png) |
 
+L'interface s'adapte aux petits écrans : une seule colonne, des boutons à la
+taille du doigt, et le ticket amené à l'écran après chaque calcul.
+
+<p align="center">
+  <img src="docs/images/mobile.png" alt="Interface sur mobile : panier puis ticket de caisse sur une seule colonne" width="300" />
+</p>
+
 ### API HTTP
 
 ```bash
