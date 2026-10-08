@@ -79,13 +79,16 @@ describe('POST /api/quotes', () => {
     expect(response.statusCode).toBe(413);
   });
 
-  it('rejette un type de contenu non supporté', async () => {
+  it.each([
+    ['text/plain', 'Back to the Future 1'],
+    ['application/xml', '<cart>Back to the Future 1</cart>'],
+  ])('rejette le type de contenu %s', async (contentType, payload) => {
     const server = await startApp();
     const response = await server.inject({
       method: 'POST',
       url: '/api/quotes',
-      headers: { 'content-type': 'application/xml' },
-      payload: '<cart>Back to the Future 1</cart>',
+      headers: { 'content-type': contentType },
+      payload,
     });
 
     expect(response.statusCode).toBe(415);

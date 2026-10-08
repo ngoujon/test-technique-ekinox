@@ -27,6 +27,10 @@ export async function buildApp(config: ServerConfig): Promise<FastifyInstance> {
     connectionTimeout: 15_000,
   });
 
+  // L'API n'accepte que du JSON : on retire l'analyseur text/plain fourni par défaut
+  // pour réduire la surface d'attaque (tout autre type est rejeté en 415).
+  app.removeContentTypeParser('text/plain');
+
   // En-têtes de sécurité HTTP (CSP stricte, nosniff, frameguard, HSTS…).
   // La CSP par défaut interdit tout script inline : l'interface n'en utilise aucun.
   await app.register(helmet);
