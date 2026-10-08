@@ -28,11 +28,14 @@ renvoie le prix de la commande et le détail du calcul.
 Prérequis : **Node.js ≥ 22.12** (version de référence dans [`.nvmrc`](.nvmrc), utilisable via `nvm use`).
 
 ```bash
+git clone https://github.com/ngoujon/test-technique-ekinox.git
+cd test-technique-ekinox
 npm ci        # installe les dépendances (versions figées par package-lock.json)
 npm run dev   # démarre le serveur avec rechargement automatique
 ```
 
-Puis ouvrir <http://localhost:3000>.
+Puis ouvrir <http://localhost:3000>. Si le port 3000 est déjà occupé, en choisir
+un autre : `PORT=3001 npm run dev`.
 
 Pour une exécution « production » :
 
