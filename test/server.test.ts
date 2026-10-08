@@ -9,6 +9,7 @@ const TEST_CONFIG: ServerConfig = {
   port: 0,
   logLevel: 'silent',
   rateLimitPerMinute: 1_000,
+  trustProxy: false,
 };
 
 let app: FastifyInstance | undefined;
@@ -102,6 +103,31 @@ describe('POST /api/quotes', () => {
     expect((await request()).statusCode).toBe(200);
     expect((await request()).statusCode).toBe(200);
     expect((await request()).statusCode).toBe(429);
+  });
+});
+
+describe('reverse proxy', () => {
+  const requestFrom = (server: FastifyInstance, clientIp: string) =>
+    server.inject({
+      method: 'POST',
+      url: '/api/quotes',
+      headers: { 'x-forwarded-for': clientIp },
+      payload: { cart: '' },
+    });
+
+  it('ignore X-Forwarded-For par défaut : l’en-tête ne permet pas de contourner le quota', async () => {
+    const server = await startApp({ rateLimitPerMinute: 1 });
+
+    expect((await requestFrom(server, '203.0.113.1')).statusCode).toBe(200);
+    expect((await requestFrom(server, '203.0.113.2')).statusCode).toBe(429);
+  });
+
+  it('applique le quota par client réel derrière un proxy de confiance', async () => {
+    const server = await startApp({ rateLimitPerMinute: 1, trustProxy: true });
+
+    expect((await requestFrom(server, '203.0.113.1')).statusCode).toBe(200);
+    expect((await requestFrom(server, '203.0.113.2')).statusCode).toBe(200);
+    expect((await requestFrom(server, '203.0.113.1')).statusCode).toBe(429);
   });
 });
 

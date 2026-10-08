@@ -16,6 +16,7 @@ const PUBLIC_DIR = fileURLToPath(new URL('../../public', import.meta.url));
 export async function buildApp(config: ServerConfig): Promise<FastifyInstance> {
   const app = Fastify({
     logger: { level: config.logLevel },
+    trustProxy: config.trustProxy,
     // Limite la taille des requêtes : un panier valide n'en approche jamais.
     bodyLimit: MAX_CART_LENGTH * 4 + 1_024,
     // Validation stricte : Fastify convertit par défaut les types et retire les champs inconnus
