@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import fastifyStatic from '@fastify/static';
@@ -7,7 +7,7 @@ import type { ServerConfig } from './config.js';
 import { MAX_CART_LENGTH, registerQuoteRoute } from './quote-route.js';
 
 /** Dossier des fichiers de l'interface web, identique depuis `src/server` et `dist/server`. */
-const PUBLIC_DIR = fileURLToPath(new URL('../../public', import.meta.url));
+const PUBLIC_DIR = resolve(import.meta.dirname, '../../public');
 
 /**
  * Construit l'application sans la démarrer : les tests l'utilisent directement
