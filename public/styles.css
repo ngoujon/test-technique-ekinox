@@ -1,4 +1,7 @@
 /*
+ * Mise en page « mobile first » : une colonne par défaut, deux colonnes à partir
+ * de 48rem (tablette paysage, ordinateur). Voir les media queries en fin de fichier.
+ *
  * Thème inspiré de la DeLorean : tableau de bord sombre, accents orange « flux
  * capacitor » et afficheur ambré façon « time circuits ». Toutes les couleurs sont
  * des variables, redéfinies pour le thème clair.
@@ -62,14 +65,14 @@ body {
 .page {
   max-width: 64rem;
   margin: 0 auto;
-  padding: 3rem 1rem 4rem;
+  padding: 1.5rem 1rem 2.5rem;
 }
 
 /* --- En-tête --------------------------------------------------------------- */
 
 .hero {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.75rem;
 }
 
 .kicker {
@@ -97,9 +100,8 @@ h1 {
 }
 
 .rules {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
   margin: 0;
   padding: 0;
@@ -109,10 +111,10 @@ h1 {
 .rules li {
   padding: 0.35rem 0.85rem;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: 12px;
   background: var(--surface);
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: 0.8rem;
 }
 
 .rules strong {
@@ -123,15 +125,15 @@ h1 {
 
 .layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
   align-items: start;
 }
 
 .card {
   display: grid;
   gap: 1rem;
-  padding: 1.5rem;
+  padding: 1.25rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
@@ -166,8 +168,9 @@ textarea {
   border-radius: 10px;
   background: var(--surface-alt);
   color: var(--text);
+  /* 16 px minimum : en dessous, Safari iOS zoome sur le champ à la saisie. */
   font:
-    0.95rem/1.6 ui-monospace,
+    1rem/1.6 ui-monospace,
     'SF Mono',
     Menlo,
     Consolas,
@@ -195,12 +198,14 @@ button {
 }
 
 .examples span {
-  margin-right: 0.25rem;
+  /* Sur mobile, le libellé occupe sa propre ligne : les 5 boutons tiennent sur la suivante. */
+  flex-basis: 100%;
 }
 
 .examples button {
-  width: 2.25rem;
-  height: 2.25rem;
+  /* Cible tactile de 44 px, taille minimale recommandée sur mobile. */
+  width: 2.75rem;
+  height: 2.75rem;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--surface-alt);
@@ -256,7 +261,7 @@ button {
 .display-value {
   color: var(--display-text);
   font:
-    700 2.25rem ui-monospace,
+    700 1.75rem ui-monospace,
     'SF Mono',
     Menlo,
     Consolas,
@@ -335,4 +340,64 @@ button {
 .error {
   margin: 0;
   color: var(--error);
+}
+
+/* --- Écrans larges : tablette paysage et ordinateur ------------------------ */
+
+@media (min-width: 48rem) {
+  .page {
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  .hero {
+    margin-bottom: 2.5rem;
+  }
+
+  .rules {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .rules li {
+    border-radius: 999px;
+    font-size: 0.875rem;
+  }
+
+  .examples span {
+    flex-basis: auto;
+    margin-right: 0.25rem;
+  }
+
+  .layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  /* Le ticket reste visible pendant la saisie d'un long panier. */
+  #ticket {
+    position: sticky;
+    top: 1.5rem;
+  }
+
+  .examples button {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .display-value {
+    font-size: 2.25rem;
+  }
+}
+
+/* Respecte le réglage système de réduction des animations. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
 }

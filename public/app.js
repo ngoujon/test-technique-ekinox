@@ -94,8 +94,17 @@ function renderError(message) {
   show('error');
 }
 
+/** Mise en page sur une colonne : le ticket est sous le formulaire, hors de l'écran. */
+const singleColumn = window.matchMedia('(max-width: 47.99rem)');
+/** Vrai jusqu'à la fin du calcul automatique lancé à l'ouverture de la page. */
+let isInitialQuote = true;
+
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
+  // Sur mobile, amène le ticket à l'écran après un calcul demandé par l'utilisateur
+  // (pas lors du calcul automatique à l'ouverture de la page).
+  const scrollToTicket = singleColumn.matches && !isInitialQuote;
+  isInitialQuote = false;
   submitButton.disabled = true;
   try {
     const response = await fetch('/api/quotes', {
@@ -106,6 +115,7 @@ form.addEventListener('submit', async (event) => {
     const body = await response.json();
     if (response.ok) {
       renderResult(body);
+      if (scrollToTicket) byId('ticket').scrollIntoView({ behavior: 'smooth' });
     } else {
       renderError(`Le panier n'a pas pu être chiffré : ${body.error ?? response.statusText}`);
     }
