@@ -1,4 +1,4 @@
-# 0003 — Interface web sans framework ni build
+# ADR 0003 : Interface web sans framework ni build
 
 - Statut : Acceptée
 - Date : 2026-10-07

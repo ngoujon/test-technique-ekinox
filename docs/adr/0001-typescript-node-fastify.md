@@ -1,4 +1,4 @@
-# 0001 — TypeScript sur Node.js avec Fastify
+# ADR 0001 : TypeScript sur Node.js avec Fastify
 
 - Statut : Acceptée
 - Date : 2026-10-07

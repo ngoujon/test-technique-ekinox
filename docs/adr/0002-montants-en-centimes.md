@@ -1,4 +1,4 @@
-# 0002 — Montants manipulés en centimes entiers
+# ADR 0002 : Montants manipulés en centimes entiers
 
 - Statut : Acceptée
 - Date : 2026-10-07

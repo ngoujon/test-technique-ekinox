@@ -1,4 +1,4 @@
-# Back to the Future — Caisse DVD
+# Caisse DVD Back to the Future
 
 Application web qui calcule le prix d'un panier de DVD en appliquant la promotion
 « Back to the Future » :
@@ -187,9 +187,9 @@ Le métier ne dépend d'aucun framework : l'API et la CLI ne sont que deux
 
 ## Documentation complémentaire
 
-- [Règles métier et hypothèses](docs/regles-metier.md) — interprétation de l'énoncé, cas limites
-- [Architecture](docs/architecture.md) — découpage et choix techniques
-- [API HTTP](docs/api.md) — contrat de `POST /api/quotes`
-- [Sécurité](docs/securite.md) — mesures mises en place
-- [Décisions d'architecture (ADR)](docs/adr) — historique des choix structurants
-- [Contribuer](CONTRIBUTING.md) — conventions de l'équipe
+- [Règles métier et hypothèses](docs/regles-metier.md) : interprétation de l'énoncé, cas limites
+- [Architecture](docs/architecture.md) : découpage et choix techniques
+- [API HTTP](docs/api.md) : contrat de `POST /api/quotes`
+- [Sécurité](docs/securite.md) : mesures mises en place
+- [Décisions d'architecture (ADR)](docs/adr) : historique des choix structurants
+- [Contribuer](CONTRIBUTING.md) : conventions de l'équipe

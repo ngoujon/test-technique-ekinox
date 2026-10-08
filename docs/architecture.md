@@ -57,12 +57,12 @@ Conséquences :
 
 | Sujet        | Choix                                | Raison principale                                                                                          |
 | ------------ | ------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
-| Langage      | TypeScript (strict) sur Node         | Typage fort, même langage côté serveur et navigateur — [ADR 0001](adr/0001-typescript-node-fastify.md)     |
+| Langage      | TypeScript (strict) sur Node         | Typage fort, même langage côté serveur et navigateur ([ADR 0001](adr/0001-typescript-node-fastify.md))     |
 | Serveur HTTP | Fastify                              | Validation et sérialisation par schéma, `inject()` pour les tests, écosystème sécurité officiel            |
-| Front        | HTML/CSS/JS natif, sans build        | Besoin minimaliste : aucun framework ne se justifie — [ADR 0003](adr/0003-interface-web-sans-framework.md) |
+| Front        | HTML/CSS/JS natif, sans build        | Besoin minimaliste : aucun framework ne se justifie ([ADR 0003](adr/0003-interface-web-sans-framework.md)) |
 | Tests        | Vitest                               | Rapide, compatible ESM/TypeScript sans configuration                                                       |
 | Qualité      | ESLint (strictTypeChecked), Prettier | Conventions vérifiées automatiquement, pas en revue                                                        |
-| Montants     | Centimes entiers                     | Pas d'erreur d'arrondi — [ADR 0002](adr/0002-montants-en-centimes.md)                                      |
+| Montants     | Centimes entiers                     | Pas d'erreur d'arrondi ([ADR 0002](adr/0002-montants-en-centimes.md))                                      |
 | Déploiement  | Image Docker multi-étapes            | Exécution reproductible, image minimale, utilisateur non root                                              |
 
 ## Évolutions envisageables
