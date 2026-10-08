@@ -47,7 +47,7 @@ Toutes les erreurs ont la forme `{ "error": "<message>" }`.
 | ------ | ------------------------------------------------------------------------------ |
 | `400`  | Corps invalide (champ manquant, mauvais type, champ inconnu, panier trop long) |
 | `413`  | Corps de requête trop volumineux                                               |
-| `415`  | `Content-Type` non supporté                                                    |
+| `415`  | `Content-Type` autre que `application/json`                                    |
 | `429`  | Trop de requêtes (voir `RATE_LIMIT_PER_MINUTE`)                                |
 | `500`  | Erreur interne (le détail est journalisé, jamais renvoyé)                      |
 

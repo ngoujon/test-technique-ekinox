@@ -141,12 +141,13 @@ Les cinq exemples de l'énoncé sont fournis dans [`examples/`](examples).
 Le serveur se configure par variables d'environnement ; une valeur invalide fait
 échouer le démarrage avec un message explicite.
 
-| Variable                | Défaut      | Description                                                  |
-| ----------------------- | ----------- | ------------------------------------------------------------ |
-| `HOST`                  | `127.0.0.1` | Interface d'écoute (`0.0.0.0` dans l'image Docker)           |
-| `PORT`                  | `3000`      | Port d'écoute                                                |
-| `LOG_LEVEL`             | `info`      | `fatal`, `error`, `warn`, `info`, `debug`, `trace`, `silent` |
-| `RATE_LIMIT_PER_MINUTE` | `100`       | Nombre maximal de requêtes par IP et par minute              |
+| Variable                | Défaut      | Description                                                                                     |
+| ----------------------- | ----------- | ----------------------------------------------------------------------------------------------- |
+| `HOST`                  | `127.0.0.1` | Interface d'écoute (`0.0.0.0` dans l'image Docker)                                              |
+| `PORT`                  | `3000`      | Port d'écoute                                                                                   |
+| `LOG_LEVEL`             | `info`      | `fatal`, `error`, `warn`, `info`, `debug`, `trace`, `silent`                                    |
+| `RATE_LIMIT_PER_MINUTE` | `100`       | Nombre maximal de requêtes par IP et par minute                                                 |
+| `TRUST_PROXY`           | `false`     | `true` uniquement derrière un reverse proxy de confiance (IP client lue dans `X-Forwarded-For`) |
 
 ## Structure du projet
 
@@ -190,6 +191,6 @@ Le métier ne dépend d'aucun framework : l'API et la CLI ne sont que deux
 - [Règles métier et hypothèses](docs/regles-metier.md) : interprétation de l'énoncé, cas limites
 - [Architecture](docs/architecture.md) : découpage et choix techniques
 - [API HTTP](docs/api.md) : contrat de `POST /api/quotes`
-- [Sécurité](docs/securite.md) : mesures mises en place
+- [Sécurité](SECURITY.md) : mesures en place et signalement des vulnérabilités
 - [Décisions d'architecture (ADR)](docs/adr) : historique des choix structurants
 - [Contribuer](CONTRIBUTING.md) : conventions de l'équipe
