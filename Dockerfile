@@ -2,7 +2,7 @@
 
 # --- Étape 1 : compilation TypeScript -------------------------------------
 # Image de base épinglée par empreinte (reproductible, non altérable), mise à jour par Dependabot.
-FROM node:24-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1 AS build
+FROM node:25-alpine@sha256:bdf2cca6fe3dabd014ea60163eca3f0f7015fbd5c7ee1b0e9ccb4ced6eb02ef4 AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 # --ignore-scripts : aucun script d'installation de dépendance n'est exécuté (chaîne d'approvisionnement).
@@ -13,7 +13,7 @@ RUN npm run build
 
 # --- Étape 2 : image d'exécution minimale ---------------------------------
 # Seuls le code compilé, les fichiers statiques et les dépendances de production sont embarqués.
-FROM node:24-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1
+FROM node:25-alpine@sha256:bdf2cca6fe3dabd014ea60163eca3f0f7015fbd5c7ee1b0e9ccb4ced6eb02ef4
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=3000
